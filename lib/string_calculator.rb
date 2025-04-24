@@ -1,13 +1,21 @@
 # frozen_string_literal: true
 
+# Main Class String Calculator
 class StringCalculator
-  def self.add(numbers)
-    delimiter = numbers.start_with?('//') ? numbers[2..-1].split("\n")[0] : ",|\n"
-    numbers = numbers.split(/#{delimiter}/).map(&:to_i)
+  def self.add(input)
+    return 0 if input.empty?
 
-    negative_numbers = numbers.select { |n| n < 0 }
+    # Get Delimiter or set default (comma , & newline \n)
+    delimiter = input.start_with?('//') ? input[2..].split("\n")[0] : ",|\n"
 
-    raise "negative numbers not allowed: #{negative_numbers.join(', ')}" if negative_numbers.any?
+    # Parse Numbers by delimiter
+    numbers = input.split(/#{delimiter}/).map(&:to_i)
+
+    # Find negative numbers
+    negatives = numbers.select(&:negative?)
+
+    # Throw exception for negative numbers
+    raise "negative numbers not allowed: #{negatives.join(', ')}" if negatives.any?
 
     numbers.sum
   end
